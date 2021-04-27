@@ -11,10 +11,6 @@ class ModelTrainer(BaseTrainer):
         self.model_dir = model_dir
         self.tb_dir = tb_dir
         self.callbacks = []
-        self.loss = []
-        self.acc = []
-        self.val_loss = []
-        self.val_acc = []
         self.init_callbacks()
 
     def init_callbacks(self):
@@ -51,7 +47,7 @@ class ModelTrainer(BaseTrainer):
                           ))
 
     def train(self):
-        history =  self.model.fit_generator(self.data_generator,
+        self.model.fit_generator(self.data_generator,
                         epochs = self.args.epochs,
                         validation_data = self.validation_generator ,
                         validation_steps = self.validation_generator.__len__(),
@@ -59,13 +55,5 @@ class ModelTrainer(BaseTrainer):
                         max_queue_size = self.args.max_queue_size,
                         workers = self.args.num_workers,
                         callbacks = self.callbacks)
-
-        self.loss.extend(history.history['loss'])
-        self.acc.extend(history.history['acc'])
-        self.val_loss.extend(history.history['val_loss'])
-        self.val_acc.extend(history.history['val_acc'])
-
-
-
 
 

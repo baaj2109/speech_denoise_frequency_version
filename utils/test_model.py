@@ -13,8 +13,8 @@ from .data_tools import audio_files_to_numpy, numpy_audio_to_matrix_spectrogram,
 
 def get_audio(clean_audio_path, noise_audio_path):
     try:
-        clean_audio, clean_sr = librosa.load(clean_audio_path, mono= True, sr= None)
-        noise_audio, noise_sr = librosa.load(noise_audio_path, mono= True, sr= None)
+        clean_audio, clean_sr = librosa.load(clean_audio_path, mono = True, sr = None)
+        noise_audio, noise_sr = librosa.load(noise_audio_path, mono = True, sr = None)
         assert clean_sr == noise_sr, f"clean audio sample_rate is different than noise audio sample rate, current {clean_sr} and {noise_sr}"
         return clean_audio, noise_audio, clean_sr
     except:
@@ -132,7 +132,7 @@ def get_parse():
 
 
 if __name__ == '__main__':
-    
+
     args = get_parse()
     main(args)
 

@@ -8,7 +8,7 @@ parser = argparse.ArgumentParser(description='Speech enhancement,data creation, 
 # --------------
 parser.add_argument('--epochs',
                     type = int,
-                    default = 100,
+                    default = 2,
                     help = 'number of epoch to train')
 
 parser.add_argument('--iterations-per-epoch',
@@ -107,6 +107,8 @@ parser.add_argument("--valid-clean-path",
 parser.add_argument("--valid-noise-path", 
                     default = "/Volumes/IPEVO_X0244/speech_to_text/speech_to_text_dataset/noisy_testset_wav/", 
                     type = str)
+
+parser.add_argument("--mix-data", action = 'store_true')
 
 
 
