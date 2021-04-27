@@ -16,14 +16,14 @@ class ModelTrainer(BaseTrainer):
     def init_callbacks(self):
 
         self.callbacks.append(
-            TensorBoard(log_dir = self.tb_dir, 
+            TensorBoard(log_dir = self.tb_dir,
                        histogram_freq = 0,
                        write_graph = True,
                        write_images = False,
                        write_grads = True,
-                       update_freq = 5000, ## 'epoch' for save every epoch 
+                       update_freq = 5000, ## 'epoch' for save every epoch
                        # profile_batch = 0,  ## 2 for enable
-                       embeddings_freq = 0, ## 1 for enable 
+                       embeddings_freq = 0, ## 1 for enable
                        ))
 
         self.callbacks.append(
@@ -47,7 +47,7 @@ class ModelTrainer(BaseTrainer):
                           ))
 
     def train(self):
-        self.model.fit_generator(self.data_generator,
+        self.model.fit(self.data_generator,
                         epochs = self.args.epochs,
                         validation_data = self.validation_generator ,
                         validation_steps = self.validation_generator.__len__(),
@@ -55,5 +55,3 @@ class ModelTrainer(BaseTrainer):
                         max_queue_size = self.args.max_queue_size,
                         workers = self.args.num_workers,
                         callbacks = self.callbacks)
-
-

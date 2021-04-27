@@ -1,6 +1,6 @@
 from base.base_data_loader import BaseDataLoader
 from .data_generator import DataGenerator
-from .mix_daata_generator import MixDataGenerator
+from .mix_data_generator import MixDataGenerator
 
 
 class SpeechDataLoader(BaseDataLoader):
@@ -9,7 +9,7 @@ class SpeechDataLoader(BaseDataLoader):
 
     def get_train_generator(self):
 
-        if self.mix_data:
+        if self.args.mix_data:
             return  MixDataGenerator(clean_audio_path = self.args.train_clean_path,
                               noise_audio_path = self.args.train_noise_path,
                               batch_size = self.args.batch_size,
@@ -31,7 +31,7 @@ class SpeechDataLoader(BaseDataLoader):
 
     def get_test_generator(self):
 
-        if self.mix_data:
+        if self.args.mix_data:
             return  MixDataGenerator(clean_audio_path = self.args.valid_clean_path,
                               noise_audio_path = self.args.valid_noise_path,
                               batch_size = self.args.batch_size,
