@@ -1,7 +1,7 @@
 import os
 import datetime
 
-from args import parser 
+from args import parser
 from trainer import ModelTrainer
 from model import Unet
 from data_loader import SpeechDataLoader
@@ -15,7 +15,8 @@ if int(tf.__version__.split(".")[0]) >= 2:
 else:
     import keras
     from keras import optimizers, losses
-
+import warnings
+warnings.filterwarnings('ignore')
 
 def create_train_workspace(path):
     train_dir = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -46,16 +47,18 @@ def main(args):
 
     loss = None
     if int(tf.__version__.split(".")[0]) >= 2:
-        loss = losses.Huber()    
+        loss = losses.Huber()
     else:
         loss = losses.huber_loss
 
-    model.compile(optimizer = optim, loss = loss)
+    model.compile(optimizer = optim, loss = loss, metrics = ['mae'])
 
     train_dir, models_dir = create_train_workspace(args.outdir)
     write_args(train_dir, args)
 
 
+    print(f"train generator : {train_generator}")
+    print(f"valid generator : {valid_generator}")
     trainer = ModelTrainer(args, model, train_generator, valid_generator, models_dir, train_dir)
     trainer.train()
 
@@ -63,6 +66,3 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     main(args)
-
-
-

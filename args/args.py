@@ -93,19 +93,19 @@ parser.add_argument("--file-size", default = -1, type = int)
 parser.add_argument("--wave-size", default = 8192, type = int)
 
 parser.add_argument("--train-clean-path",
-                    default = "/Volumes/IPEVO_X0244/speech_to_text/speech_to_text_dataset/clean_trainset_56spk_wav/",
+                    default = "/Documents/Documents/speech_denoise/clean_trainset_56spk_wav/",
                     type = str)
 
 parser.add_argument("--train-noise-path",
-                    default = "/Volumes/IPEVO_X0244/speech_to_text/speech_to_text_dataset/noisy_trainset_56spk_wav/",
+                    default = "/Documents/Documents/speech_denoise/noisy_trainset_56spk_wav/",
                     type = str)
 
 parser.add_argument("--valid-clean-path",
-                    default = "/Volumes/IPEVO_X0244/speech_to_text/speech_to_text_dataset/clean_testset_wav/",
+                    default = "//Documents/Documents/speech_denoise/clean_testset_wav/",
                     type = str)
 
 parser.add_argument("--valid-noise-path",
-                    default = "/Volumes/IPEVO_X0244/speech_to_text/speech_to_text_dataset/noisy_testset_wav/",
+                    default = "/Documents/Documents/speech_denoise/noisy_testset_wav/",
                     type = str)
 
 parser.add_argument("--mix-data", default = False, type = lambda x: (str(x).lower() == "true"))
