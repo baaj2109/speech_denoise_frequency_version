@@ -54,4 +54,5 @@ class ModelTrainer(BaseTrainer):
                         use_multiprocessing = self.args.use_multiprocessing,
                         max_queue_size = self.args.max_queue_size,
                         workers = self.args.num_workers,
-                        callbacks = self.callbacks)
+                        callbacks = self.callbacks,
+                        verbose = 0)

@@ -60,10 +60,12 @@ class MixDataGenerator(Sequence):
 
         y = voice
         x = noisy_voice
-        x_magnitude, x_phase = self._wave_to_magnitude_db_and_phase(x,
+        x_magnitude, x_phase = self._numpy_audio_to_matrix_spectrogram(x,
+                                                                    dim_square_spec = self.dim_square_spec,
                                                                     n_fft = self.n_fft,
                                                                     hop_length = self.hop_length)
-        y_magnitude, y_phase = self._wave_to_magnitude_db_and_phase(y,
+        y_magnitude, y_phase = self._numpy_audio_to_matrix_spectrogram(y,
+                                                                    dim_square_spec = self.dim_square_spec,
                                                                     n_fft = self.n_fft,
                                                                     hop_length = self.hop_length)
         y_magnitude = x_magnitude - y_magnitude
@@ -78,30 +80,36 @@ class MixDataGenerator(Sequence):
             x, y = self._batch_1(i)
             X.append(x)
             Y.append(y)
-        return np.array(X), np.array(Y)
+        return np.vstack(X), np.vstack(Y)
 
     def _load_audio(self, path):
         wave, sr = librosa.load(path, mono = True, sr = self.sample_rate)
         return wave
 
+    def _audio_to_audio_frame_stack(self, wave, frame_length):
+        sequence_sample_length = wave.shape[0]
+        wave = np.concatenate([wave, np.zeros(((sequence_sample_length // frame_length) + 1) * frame_length - sequence_sample_length)])
+        sequence_sample_length = wave.shape[0]
+
+        sound_data_list = [wave[start : start + frame_length] for start in range(
+        0, sequence_sample_length - frame_length + 1, frame_length)]  
+
+        sound_data_array = np.vstack(sound_data_list)
+        return sound_data_array
+
     def _get_audio_wave(self, index):
         clean_file = self.clean_file_list[index]
+        folder_id = self._get_folder_id()
 
-        while True:
-            try:
-                folder_id = self._get_folder_id()
+        noise_file = np.random.choice(os.listdir(os.path.join(self.noise_audio_path, f"fold{folder_id}")))
+        noise_file = os.path.join(self.noise_audio_path, f"fold{folder_id}", noise_file)
 
-                noise_file = np.random.choice(os.listdir(os.path.join(self.noise_audio_path, f"fold{folder_id}")))
-                noise_file = os.path.join(self.noise_audio_path, f"fold{folder_id}", noise_file)
+        clean_wave = self._load_audio(clean_file)
+        noise_wave = self._load_audio(noise_file)
 
-                clean_wave = self._load_audio(clean_file)
-                noise_wave = self._load_audio(noise_file)
-                start_location = np.random.randint(len(clean_wave) - self.wave_size)
-
-                noise_wave = noise_wave[start_location: start_location + self.wave_size]
-                clean_wave = clean_wave[start_location: start_location + self.wave_size]
-                return self._blend_noise_randomly(noise_wave, clean_wave)
-            except: pass
+        clean_wave = self._audio_to_audio_frame_stack(clean_wave, self.wave_size)
+        noise_wave = self._audio_to_audio_frame_stack(noise_wave, self.wave_size)
+        return self._blend_noise_randomly(noise_wave, clean_wave)
 
     def _get_folder_id(self):
         if self.is_train:
@@ -110,9 +118,21 @@ class MixDataGenerator(Sequence):
             return 10
 
     def _blend_noise_randomly(self, noise, clean):
-        level_noise = np.random.uniform(.2, .8)
-        noisy_clean = clean + level_noise * noise
+        noisy_clean = np.zeros((clean.shape))
+        for i in range(clean.shape[0]):
+            noise_id = np.random.randint(0, noise.shape[0])
+            level_noise = np.random.uniform(.2, .8)
+            noisy_clean[i] = clean[i] + level_noise * noise[noise_id]
         return clean, noise, noisy_clean
+
+    def _numpy_audio_to_matrix_spectrogram(self, wave, dim_square_spec, n_fft, hop_length):
+        nb_audio = wave.shape[0]
+        m_mag_db = np.zeros((nb_audio, dim_square_spec, dim_square_spec))
+        m_phase = np.zeros((nb_audio, dim_square_spec, dim_square_spec))
+        for i in range(nb_audio):
+            m_mag_db[i], m_phase[i] = self._wave_to_magnitude_db_and_phase(
+                wave[i], n_fft, hop_length)
+        return m_mag_db, m_phase
 
     def _wave_to_magnitude_db_and_phase(self, wave, n_fft, hop_length):
         stftaudio = librosa.stft(wave, n_fft = n_fft, hop_length = hop_length)
