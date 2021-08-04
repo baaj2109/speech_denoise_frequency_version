@@ -28,7 +28,7 @@ class ModelTrainer(BaseTrainer):
 
         self.callbacks.append(
             ModelCheckpoint(
-                filepath = os.path.join(self.model_dir, 'epochs-{epoch:02d}-val-loss-{val_loss:.4f}.h5'),
+                filepath = os.path.join(self.model_dir, 'epochs-{epoch:02d}-val-loss-{val_loss:.6f}.h5'),
                 monitor = "val_loss",
                 save_best_only = self.args.save_best_models_only,
                 ))
@@ -55,4 +55,5 @@ class ModelTrainer(BaseTrainer):
                         max_queue_size = self.args.max_queue_size,
                         workers = self.args.num_workers,
                         callbacks = self.callbacks,
-                        verbose = 0)
+                        # verbose = 0
+                    )

@@ -92,6 +92,8 @@ parser.add_argument("--file-size", default = -1, type = int)
 
 parser.add_argument("--wave-size", default = 8192, type = int)
 
+parser.add_argument("--sample-rate", default = 48000, type = int)
+
 parser.add_argument("--train-clean-path",
                     default = "/Documents/Documents/speech_denoise/clean_trainset_56spk_wav/",
                     type = str)

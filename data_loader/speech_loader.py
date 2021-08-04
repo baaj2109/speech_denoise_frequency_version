@@ -17,7 +17,7 @@ class SpeechDataLoader(BaseDataLoader):
                               wave_size = self.args.wave_size,
                               n_fft = self.args.n_fft,
                               hop_length = self.args.hop_length,
-                              sample_rate = 48000,
+                              sample_rate = self.args.sample_rate,
                               is_train = True)
 
 
@@ -39,7 +39,7 @@ class SpeechDataLoader(BaseDataLoader):
                               wave_size = self.args.wave_size,
                               n_fft = self.args.n_fft,
                               hop_length = self.args.hop_length,
-                              sample_rate = 48000,
+                              sample_rate = self.args.sample_rate,
                               is_train = False)
 
         return DataGenerator(clean_audio_path = self.args.valid_clean_path,
