@@ -10,6 +10,7 @@ class SpeechDataLoader(BaseDataLoader):
     def get_train_generator(self):
 
         if self.args.mix_data:
+            # return MixDataGenerator(args, is_train = True)            
             return  MixDataGenerator(clean_audio_path = self.args.train_clean_path,
                               noise_audio_path = self.args.train_noise_path,
                               batch_size = self.args.batch_size,
@@ -20,7 +21,7 @@ class SpeechDataLoader(BaseDataLoader):
                               sample_rate = self.args.sample_rate,
                               is_train = True)
 
-
+        # return DataGenerator(args, is_train = True)
         return DataGenerator(clean_audio_path = self.args.train_clean_path,
                               noise_audio_path = self.args.train_noise_path,
                               batch_size = self.args.batch_size,
@@ -32,6 +33,7 @@ class SpeechDataLoader(BaseDataLoader):
     def get_test_generator(self):
 
         if self.args.mix_data:
+            # return MixDataGenerator(args, is_train = True)
             return  MixDataGenerator(clean_audio_path = self.args.valid_clean_path,
                               noise_audio_path = self.args.valid_noise_path,
                               batch_size = self.args.batch_size,
@@ -41,7 +43,7 @@ class SpeechDataLoader(BaseDataLoader):
                               hop_length = self.args.hop_length,
                               sample_rate = self.args.sample_rate,
                               is_train = False)
-
+        # return DataGenerator(args, is_train = False) 
         return DataGenerator(clean_audio_path = self.args.valid_clean_path,
                               noise_audio_path = self.args.valid_noise_path,
                               batch_size = self.args.batch_size,

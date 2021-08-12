@@ -94,6 +94,8 @@ parser.add_argument("--wave-size", default = 8192, type = int)
 
 parser.add_argument("--sample-rate", default = 48000, type = int)
 
+parser.add_argument("--blank-frame", action = 'store_true', help = "if true, training data contain frame without human voice")
+
 parser.add_argument("--train-clean-path",
                     default = "/Documents/Documents/speech_denoise/clean_trainset_56spk_wav/",
                     type = str)
@@ -111,3 +113,9 @@ parser.add_argument("--valid-noise-path",
                     type = str)
 
 parser.add_argument("--mix-data", default = False, type = lambda x: (str(x).lower() == "true"))
+
+
+
+
+
+

@@ -39,6 +39,37 @@ class MixDataGenerator(Sequence):
         elif isinstance(self.file_size, float):
             n = int(self.file_size * len(self.clean_file_list))
             self.clean_file_list = self.clean_file_list[:n]
+     '''
+     def __init__(self,
+               args,
+               is_train = True):
+        if is_train:
+            self.clean_audio_path = args.train_clean_path
+            self.noise_audio_path = args.train_noise_path
+        else:
+            self.clean_audio_path = args.valid_clean_path      
+            self.noise_audio_path = args.valid_noise_path
+        self.batch_size = args.batch_size
+        self.file_size = args.file_size
+        self.wave_size = args.wave_size
+
+        self.is_train = is_train
+        self.sample_rate = args.sample_rate
+        self.n_fft = args.n_fft
+        self.hop_length = args.hop_length
+        self.dim_square_spec = int(self.n_fft / 2) + 1
+
+        self.clean_file_list = self._load_audio_list(self.clean_audio_path)
+
+        if isinstance(self.file_size, int):
+            self.clean_file_list = self.clean_file_list[:self.file_size]
+        elif isinstance(self.file_size, float):
+            n = int(self.file_size * len(self.clean_file_list))
+            self.clean_file_list = self.clean_file_list[:n]
+        
+        self.use_blank_frame = args.blank_frame
+    '''
+
 
     def _load_audio_list(self, path):
         return [file for file in glob.glob(path, recursive = True)]
@@ -58,8 +89,9 @@ class MixDataGenerator(Sequence):
     def _batch_1(self, index):
         voice, noise, noisy_voice = self._get_audio_wave(index)
 
-        y = voice
+        #y = voice
         x = noisy_voice
+        y = voice
         x_magnitude, x_phase = self._numpy_audio_to_matrix_spectrogram(x,
                                                                     dim_square_spec = self.dim_square_spec,
                                                                     n_fft = self.n_fft,
@@ -125,6 +157,13 @@ class MixDataGenerator(Sequence):
         for i in range(clean.shape[0]):
             level_noise = np.random.uniform(.2, .8)
             noisy_clean[i] = clean[i] + level_noise * noise[i % noise.shape[0]]
+            '''
+            if self.use_blank_frame and np.random.random() > 0.75:
+                noisy_clean[i] = level * noise[i % noise.shape[0]]
+                clean[i] = np.zeros_like(clean[i])
+            else:
+                noisy_clean[i] = clean[i] + level_noise * noise[i % noise.shape[0]]  
+            '''
         return clean, noise, noisy_clean
 
     def _numpy_audio_to_matrix_spectrogram(self, wave, dim_square_spec, n_fft, hop_length):

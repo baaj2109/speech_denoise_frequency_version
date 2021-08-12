@@ -37,6 +37,35 @@ class DataGenerator(Sequence):
             n = int(self.file_size * len(self.clean_file_list))
             self.clean_file_list = self.clean_file_list[:n]
             self.noise_file_list = self.noise_file_list[:n]
+    '''
+    def __init__(self,
+               args,
+               is_train = True):
+        if is_train:
+            self.clean_audio_path = args.train_clean_path
+            self.noise_audio_path = args.train_noise_path
+        else:
+           self.clean_audio_path = args.valid_clean_path            
+           self.noise_audio_path = args.valid_noise_path
+        self.batch_size = args.batch_size
+        self.file_size = args.file_size
+        self.wave_size = args.wave_size
+
+        self.n_fft = args.n_fft
+        self.hop_length = args.hop_length
+        self.dim_square_spec = int(self.n_fft / 2) + 1
+
+        self.clean_file_list = self._load_audio_list(self.clean_audio_path)
+        self.noise_file_list = self._load_audio_list(self.noise_audio_path)
+
+        if isinstance(self.file_size, int):
+            self.clean_file_list = self.clean_file_list[:self.file_size]
+            self.noise_file_list = self.noise_file_list[:self.file_size]
+        elif isinstance(self.file_size, float):
+            n = int(self.file_size * len(self.clean_file_list))
+            self.clean_file_list = self.clean_file_list[:n]
+            self.noise_file_list = self.noise_file_list[:n]
+    '''
 
     def _load_audio_list(self, path):
         assert os.path.exists(path), f"{path} not exists."
