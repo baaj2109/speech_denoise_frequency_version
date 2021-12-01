@@ -1,6 +1,10 @@
 from base.base_trainer import BaseTrainer
 import os
-from keras.callbacks import LearningRateScheduler, ModelCheckpoint, TensorBoard
+import tensorflow as tf
+if int(tf.__version__.split(".")[0]) >= 2:
+    from tensorflow.keras.callbacks import LearningRateScheduler, ModelCheckpoint, TensorBoard
+else:
+    from keras.callbacks import LearningRateScheduler, ModelCheckpoint, TensorBoard
 
 
 

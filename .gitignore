@@ -2,3 +2,6 @@
 output/
 *.h5
 *.sh
+*.DS_Store
+*.ipynb
+*.ipynb_checkpoints
