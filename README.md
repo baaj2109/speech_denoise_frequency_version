@@ -2,9 +2,12 @@
 speech denoise with frequency base, model predict noise magnitude
 
 ## train
-1. prepare dataset 
-[VCTK](https://datashare.ed.ac.uk/handle/10283/2791)
-[UrbanSound8K](https://urbansounddataset.weebly.com/urbansound8k.html)
+1. download speech dataset 
+
+      [VCTK](https://datashare.ed.ac.uk/handle/10283/2791)
+
+      [UrbanSound8K](https://urbansounddataset.weebly.com/urbansound8k.html)
+
 2. training model with VCTK dataset
 ```
 python main.py --train-clean-path ./speech_denoise_dataset/clean_trainset_56spk_wav/ \
