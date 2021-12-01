@@ -41,6 +41,8 @@ def main(args):
     valid_generator = speech_data_loader.get_test_generator()
 
     model_wrapper = Unet(args)
+    if args.pretrained_model:
+        model_wrapper.load(args.pretrained_model)
     model = model_wrapper.model
 
     optim = optimizers.Adam(lr = args.learning_rate)
@@ -51,7 +53,7 @@ def main(args):
     else:
         loss = losses.huber_loss
 
-    model.compile(optimizer = optim, loss = loss, metrics = ['mae'])
+    model.compile(optimizer = optim, loss = loss, metrics = ['mae', 'cosine_similarity'])
 
     train_dir, models_dir = create_train_workspace(args.outdir)
     write_args(train_dir, args)

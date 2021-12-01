@@ -1,5 +1,6 @@
 
-output/
+output*
+events.out.tfevents.*
 *.h5
 *.sh
 *.DS_Store
