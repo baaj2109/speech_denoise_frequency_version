@@ -1,4 +1,4 @@
-# speech_denoise_frequency_version
+# speech denoise frequency version
 speech denoise with frequency base, model predict noise magnitude
 
 ## dataset
@@ -37,7 +37,6 @@ python main.py --mix-data true \
                --save-best-models-only \
                --sample-rate 8000 \
 ```
-
 ## folder structure
 ```sh
 .
@@ -71,4 +70,3 @@ python main.py --mix-data true \
 │   └───test_model
 └───output
 ```
-
